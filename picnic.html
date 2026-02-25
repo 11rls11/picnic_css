@@ -1,29 +1,29 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mi página con Picnic CSS</title>
-  
-<link rel="stylesheet" href="">
-  
-  <style>
-    .flex.demo{
-     margin: .2em 0;
-     background: #2ecc40;
-     text-align: center;
-    }
-    .flex.demo div {
-      border:.1em solid pink;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi página con Picnic CSS</title>
 
-  </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+
+    <style>
+        .flex.demo {
+            margin: .2em 0;
+            background: #2ecc40;
+            text-align: center;
+        }
+
+        .flex.demo div {
+            border: .1em solid pink;
+        }
+
+    </style>
 </head>
 <body>
-  
-
-  <button id="musico">Ve por mi artista favorito</button>
-  <div class="flex two four-1200 demo">
+<button id="musico">Ve por mi artista favorito</button>
+<button id="musico-companero">Ve por el artista de mi compañero de equipo</button>
+<div class="flex two four-1200 demo">
     <div id="bio">1</div>
     <div id="imagen">2</div>
     <div>3</div>
@@ -32,36 +32,83 @@
     <div>6</div>
     <div>7</div>
     <div>8</div>
-  
-  </div>
+</div>
 
-    <script>
-    
-    let biografia;
+<div class="tabs two">
+    <input id='tab-1' type='radio' name='tabgroupB' checked/>
+    <label class="pseudo button toggle" for="tab-1">Pregunta #1</label>
+    <input id='tab-2' type='radio' name='tabgroupB'>
+    <label class="pseudo button toggle" for="tab-2">Pregunta #2</label>
+    <div class="row">
+        <div>
+            <p>
+                Tuve una experiencia caótica, estaba de camino a hacer el súper, como todos los domingos, y en eso que
+                recibo mensajes de amig@s en un grupo, algunos tenían familiares en el maratón y otros ya conocian o
+                estaban
+                cerca de dónde se estaba escuchando todo el meollo, lo bueno que me regrese y estando en casa ya vi como
+                se
+                ayudaban o preguntaban si estabamos en casa, y desde entonces, y sin salir, ha sido tranquilo, estando
+                en
+                casa.
+            </p>
+        </div>
+        <div>
+            <p>
+                Me gustaría que ya no fuera una normalidad los niveles de violencia que existen en el país; que
+                existieran
+                cambios verdaderos en el sistema fallido que vivimos.
+            </p>
+        </div>
+    </div>
+</div>
 
-    document.addEventListener("DOMContentLoaded", function() {
-         // biografia = document.getElementById();
-         // document.getElementById().addEventListener("click", );
-          //console.log("DOM listo");
+<script>
+
+    let biografia, imagen;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        biografia = document.getElementById("bio");
+        imagen = document.getElementById("imagen")
+        document.getElementById("musico").addEventListener("click", obtenerJSON);
+        document.getElementById("musico-companero").addEventListener("click", obtenerJSONAmigo);
+        //console.log("DOM listo");
     });
 
+    async function obtenerJSON() {
 
-     async function obtenerJSON() {
-       // const respuesta = await fetch('https://www.theaudiodb.com/api/v1/json/123/search.php?s=');  
-       // const datos = await respuesta.json();
-       // console.log(datos);
+        biografia.innerHTML = "";
+        imagen.innerHTML = "";
+
+        const respuesta = await fetch('https://www.theaudiodb.com/api/v1/json/123/search.php?s=Björk');
+        const datos = await respuesta.json();
+        console.log(datos);
 
         const textoArtista = document.createElement('p');
-        //textoArtista.textContent = 
-        //biografia.appendChild(textoArtista);
+        textoArtista.textContent = datos.artists[0].strBiographyEN;
+        biografia.appendChild(textoArtista);
 
-        //const imagenArtista= document.createElement('');
-        
-        //imagenArtista.setAttribute('src', '');
-     }
+        const imagenArtista= document.createElement('img');
+        imagenArtista.setAttribute('src', datos.artists[0].strArtistFanart4);
+        imagen.appendChild(imagenArtista);
+    }
 
+    async function obtenerJSONAmigo() {
 
+        biografia.innerHTML = "";
+        imagen.innerHTML = "";
 
-    </script>
+        const respuesta = await fetch('https://www.theaudiodb.com/api/v1/json/123/search.php?s=Slipknot');
+        const datos = await respuesta.json();
+        console.log(datos);
+
+        const textoArtista = document.createElement('p');
+        textoArtista.textContent = datos.artists[0].strBiographyEN;
+        biografia.appendChild(textoArtista);
+
+        const imagenArtista= document.createElement('img');
+        imagenArtista.setAttribute('src', datos.artists[0].strArtistFanart);
+        imagen.appendChild(imagenArtista);
+    }
+</script>
 </body>
 </html>
